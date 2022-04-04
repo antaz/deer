@@ -29,9 +29,13 @@ class Weather:
         self.URL = 'https://wttr.in/{}?format=j2'.format(self.city) 
         # format=j1 returns hourly info, which is overkill
 
-        with urllib.request.urlopen(self.URL) as f:
-            data = json.loads(f.read())
-
+        try:
+            with urllib.request.urlopen(self.URL) as f:
+                data = json.loads(f.read())
+        except Exception as e:
+            self.info = f"gtfo: error {e}"
+            return
+            
         self.parse_json(data)
 
 
@@ -45,9 +49,12 @@ class Weather:
 
 
     def __repr__(self):
-        info =  f"It's {self.curr_desc.lower()} as fuck over in " + \
-            f"{self.city} rn.\n{self.curr_temp}°C [{self.l_c}, {self.h_c}]°C."
-        return info
+
+        if not self.info:
+            self.info =  f"It's {self.curr_desc.lower()} as fuck over in " + \
+                f"{self.city} rn. {self.curr_temp}°C [{self.l_c}, {self.h_c}]°C."
+
+        return self.info
 
 
 if __name__ == '__main__':
