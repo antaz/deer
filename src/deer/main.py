@@ -1,52 +1,112 @@
-import socket
 import ssl
 import sys
 import re
+import importlib
 
 sys.path.append('..')
 import weather
+from Socket import Socket
+from ud import UrbanDictionary as UD
+
+# NETWORK VARIABLES
+HOSTNAME = 'irc.libera.chat'
+PORT     = 6667
+ADDRESS  = (HOSTNAME, PORT)
+
+# IRC VARIABLES
+NICK     = 'deerBOT'
+CHANNEL  = '##deerbot'
+BUFSIZE  = 1024
+
+#context  = ssl.create_default_context()
+#COMMANDS = ['weather']
 
 
-hostname = 'irc.libera.chat'
-port = 6667
-CHANNEL = '##deerbot'
-context = ssl.create_default_context()
-
-
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-
-    s.connect((hostname, port))
+def first_conn(socket, channel):
 
     while True:
 
-        data = s.recv(1024).decode('utf-8')
-        print(f"{data=}")
+        data = socket.recv(1024).decode('utf-8')
+        print(f"<<< {data}")
 
         if "PING" in data:
-            s.send(b'PONG\r\n')
+            socket.send('PONG')
 
-        elif ".weather" in data:
+        elif "No Ident" in data:
+            socket.send(f'NICK {NICK}')
+            socket.send(f'USER {NICK} * {NICK} {NICK}')
 
-            m = re.search(r'(weather) (.*)\b', data)
+        elif "376" in data:
+            socket.send(f'JOIN {CHANNEL}')
+
+            break
+
+
+
+with Socket() as socket:
+
+    socket.connect(ADDRESS)
+
+    first_conn(socket, CHANNEL)
+    
+
+    while True:
+
+        data = socket.recv(BUFSIZE).decode('utf-8')
+        print(f"<<< {data}")
+
+        if "PING" in data:
+            socket.send('PONG')
+
+        elif ":.reload" in data:
+            importlib.reload(weather)
+            print("Weather module reloaded.")
+            importlib.reload(ud)
+            print("UD module reloaded.")
+
+
+        elif ":.weather" in data:
+
+            city = weather.Weather(data)
 
             try:
-                print(m.group(2).strip())
+                m = re.search(r'(PRIVMSG) (.*) (:)', data)
+                channel = m.group(2)
 
-            except Exception:
-                s.send(b'PRIVMSG {CHANNEL} :Which city bitch?\r\n')
+            except Exception as e:
+                print('\n', f"{e=}")
                 continue
 
-            city = weather.Weather(m.group(2).strip())
-            msg = bytes(f'PRIVMSG {CHANNEL} :{city}\r\n', 'utf-8')
-            s.send(msg)
-            print(f"{msg=}")
+
+            msg = f'PRIVMSG {channel} :{city}'
+
+            socket.send(msg)
+
+        elif '.ud' in data:
+
+            try:
+                m = re.search(r'(PRIVMSG) (.*) (:)', data)
+                channel = m.group(2)
+
+            except Exception as e:
+                print('\n', f"{e=}")
+                continue
+
+            definition = UD(data)
+
+            msg = f'PRIVMSG {channel} :{definition}'
+            socket.send(msg)
 
 
-        elif "No Ident" in str(data):
-            s.send(b'NICK deerBOT\r\n')
-            s.send(b'USER deerBOT * deerBOT deerBOT\r\n')
+        elif f"nomn INVITE {NICK} :" in data:
 
-        elif "376" in str(data):
-            msg = bytes(f'JOIN {CHANNEL} \r\n', 'utf-8')
-            s.send(msg)
+            m = re.search(rf'(nomn INVITE ){NICK}( :)(.*)\b', data)
+            try:
+                channel = m.group(3).strip()
+                socket.send(f'JOIN {channel}')
+
+
+            except Exception as e:
+                print(e)
+                print(e)
 

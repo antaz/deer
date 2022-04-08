@@ -1,12 +1,14 @@
 import urllib.request
 import json
+import re
 
+
+print("Loading the weather module...")
 
 class Weather:
     """ Weather class.
 
-    Get the current weather for a place.
-    Queries wttr.in for JSON response
+    Get the current weather for a place.  Queries wttr.in for JSON response
     
     Attributes:
 
@@ -18,10 +20,19 @@ class Weather:
 
     """
 
-    def __init__(self, city: str) -> None:
+    def __init__(self, query: str) -> None:
 
-        self.city = city.strip().replace(" ", "%20")
-        self.query_wttrin()
+        m = re.search(r'(weather) (.*)\b', query)
+
+        try:
+            self.city = m.group(2).strip().replace(" ", "%20")
+
+        except Exception:
+            self.info = "It's `.weather CITY`, bro."
+
+        else:
+            self.query_wttrin()
+
 
 
     def query_wttrin(self):
@@ -46,13 +57,16 @@ class Weather:
         self.precip_mm = data['current_condition'][0]['precipMM']
         self.l_c       = data['weather'][0]['mintempC']
         self.h_c       = data['weather'][0]['maxtempC']
+        self.country   = data['nearest_area'][0]['country'][0]['value']
+
+        self.info =  (
+            f"{self.curr_desc} over in "
+            f"{self.city.capitalize()}, {self.country}. "
+            f"{self.curr_temp}°C [{self.l_c}, {self.h_c}]°C."
+        )
 
 
     def __repr__(self):
-
-        if not self.info:
-            self.info =  f"It's {self.curr_desc.lower()} as fuck over in " + \
-                f"{self.city} rn. {self.curr_temp}°C [{self.l_c}, {self.h_c}]°C."
 
         return self.info
 
