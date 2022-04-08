@@ -1,5 +1,6 @@
 import urllib.request
 import json
+<<<<<<< HEAD
 import re
 
 
@@ -8,7 +9,8 @@ print("Loading the weather module...")
 class Weather:
     """ Weather class.
 
-    Get the current weather for a place.  Queries wttr.in for JSON response
+    Get the current weather for a place.
+    Queries wttr.in for JSON response
     
     Attributes:
 
@@ -32,7 +34,6 @@ class Weather:
 
         else:
             self.query_wttrin()
-
 
 
     def query_wttrin(self):
