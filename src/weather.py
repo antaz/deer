@@ -1,6 +1,5 @@
 import urllib.request
 import json
-<<<<<<< HEAD
 import re
 
 
@@ -19,6 +18,8 @@ class Weather:
     precip_mm: str     # Precipitation in milimeters
     l_c      : str     # Lowest temperature in Celcius
     h_c      : str     # Highest temperature in Celcius
+    country  : str     # Display country (for weird city names).
+    info     : str     # Weather report.
 
     """
 
