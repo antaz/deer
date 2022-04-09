@@ -24,12 +24,12 @@ class UrbanDictionary:
         try:
             with urllib.request.urlopen(URL) as f:
                 data = json.loads(f.read())
+            self.definition = data['list'][0]['definition']
 
         except Exception as e:
             print(e)
-            self.term = "Definition faaaaaaaailed."
+            self.definition = "Not found."
 
-        self.definition = data['list'][0]['definition']
 
     def __repr__(self):
         return self.definition
