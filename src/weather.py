@@ -63,7 +63,7 @@ class Weather:
 
         self.info =  (
             f"{self.curr_desc} over in "
-            f"{self.city.capitalize()}, {self.country}. "
+            f"{self.city.capitalize().replace('%20', ' ')}, {self.country}. "
             f"{self.curr_temp}°C [{self.l_c}, {self.h_c}]°C."
         )
 
