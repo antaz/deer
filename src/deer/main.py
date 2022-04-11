@@ -32,7 +32,7 @@ def first_conn(socket, channel):
         if "PING" in data:
             socket.send('PONG')
 
-        elif "No Ident" in data:
+        elif "Ident" in data:
             socket.send(f'NICK {NICK}')
             socket.send(f'USER {NICK} * {NICK} {NICK}')
 
