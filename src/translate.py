@@ -1,5 +1,7 @@
-import json
+import json, re
 import requests
+
+print('Loading the translation module')
 
 class Translate:
     ''' Query an instance of libretranslate using their API '''
@@ -14,18 +16,22 @@ class Translate:
     }
 
     def __init__(self, query: str):
-        self.query = query
-        self.translate()
+
+        m = re.search(r'(fr) (.*)$', query)
+
+        try:
+            self.query = m.group(2).strip()
+
+        except Exception:
+            self.translation = "`.fr TERM`."
+
+        else:
+            self.translate()
+
     def translate(self):
         Translate.BODY['q'] = self.query
         r = requests.post(Translate.API_ENDPOINT, headers=Translate.HEADERS, data=json.dumps(Translate.BODY))
         self.translation = r.json()['translatedText']
+
     def __repr__(self):
         return self.translation
-
-
-def main():
-    translation = Translate("What's up, bro?")
-    print(translation)
-
-main()
