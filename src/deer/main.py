@@ -98,6 +98,20 @@ with Socket() as socket:
             socket.send(msg)
 
 
+        elif '.fr' in data:
+            try:
+                m = re.search(r'(PRIVMSG) (.*) (:)', data)
+                channel = m.group(2)
+
+            except Exception as e:
+                print('\n', f"{e=}")
+                continue
+
+            translation = Translate(data)
+            msg = f'PRIVMSG {channel} :{translation}'
+            socket.send(msg)
+
+
         elif f"nomn INVITE {NICK} :" in data:
 
             m = re.search(rf'(nomn INVITE ){NICK}( :)(.*)\b', data)
