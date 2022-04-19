@@ -64,6 +64,8 @@ with Socket() as socket:
             print("Weather module reloaded.")
             importlib.reload(ud)
             print("UD module reloaded.")
+            importlib.reload(translate)
+            print("Translation module reloaded.")
 
 
         elif ":.weather" in data:
