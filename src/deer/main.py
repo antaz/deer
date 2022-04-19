@@ -6,8 +6,8 @@ import importlib
 sys.path.append('..')
 import weather
 from Socket import Socket
-from ud import UrbanDictionary as UD
-from translation import Translate
+import ud 
+import translate 
 
 # NETWORK VARIABLES
 HOSTNAME = 'irc.libera.chat'
@@ -93,7 +93,7 @@ with Socket() as socket:
                 print('\n', f"{e=}")
                 continue
 
-            definition = UD(data)
+            definition = ud.UrbanDictionary(data)
 
             msg = f'PRIVMSG {channel} :{definition}'
             socket.send(msg)
@@ -108,7 +108,7 @@ with Socket() as socket:
                 print('\n', f"{e=}")
                 continue
 
-            translation = Translate(data)
+            translation = translate.Translate(data)
             msg = f'PRIVMSG {channel} :{translation}'
             socket.send(msg)
 
