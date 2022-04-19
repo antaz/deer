@@ -7,6 +7,7 @@ sys.path.append('..')
 import weather
 from Socket import Socket
 from ud import UrbanDictionary as UD
+from translation import Translate
 
 # NETWORK VARIABLES
 HOSTNAME = 'irc.libera.chat'
