@@ -101,6 +101,19 @@ with Socket() as socket:
             socket.send(msg)
 
 
+        elif '.tr' in data:
+            try:
+                m = re.search(r'(PRIVMSG) (.*) (:)', data)
+                channel = m.group(2)
+
+            except Exception as e:
+                print('\n', f"{e=}")
+                continue
+
+            translation = translate.Translate(data, source='any', target='fr')
+            msg = f'PRIVMSG {channel} :{translation}'
+            socket.send(msg)
+
         elif '.fr' in data:
             try:
                 m = re.search(r'(PRIVMSG) (.*) (:)', data)
@@ -110,7 +123,7 @@ with Socket() as socket:
                 print('\n', f"{e=}")
                 continue
 
-            translation = translate.Translate(data)
+            translation = translate.Translate(data, source='fr', target='en')
             msg = f'PRIVMSG {channel} :{translation}'
             socket.send(msg)
 
