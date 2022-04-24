@@ -128,11 +128,11 @@ with Socket() as socket:
             socket.send(msg)
 
 
-        elif f"nomn INVITE {NICK} :" in data:
+        elif f"INVITE {NICK} :" in data:
 
-            m = re.search(rf'(nomn INVITE ){NICK}( :)(.*)\b', data)
+            m = re.search(rf'(nomn|momentum\@tilde\.team|leonarbro)( INVITE ){NICK}( :)(.*)\b', data)
             try:
-                channel = m.group(3).strip()
+                channel = m.group(4).strip()
                 socket.send(f'JOIN {channel}')
 
 

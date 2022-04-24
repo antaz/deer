@@ -6,17 +6,17 @@ print('Loading the translation module')
 class Translate:
     ''' Query an instance of libretranslate using their API '''
 
+    api_endpoint = 'https://translate.argosopentech.com'
+    headers =  { "Content-Type": "application/json" }
 
     def __init__(self, query: str, source: str = None, target: str = None):
-        self.api_endpoint = 'https://translate.argosopentech.com'
-        self.headers =  { "Content-Type": "application/json" }
 
         if source == 'any':
             self.query = re.search(r'(tr) (.*)$', query).group(2).strip()
             self.source = self.detect_lang(self.query)
             self.target = 'en'
 
-        elif source == 'en':
+        elif source == 'fr':
             self.query = re.search(r'(fr) (.*)$', query).group(2).strip()
             self.target = target
             self.source = source
