@@ -27,15 +27,15 @@ $ git remote add fork https://github.com/{username}/deer
 $ python -m pip install --upgrade pip setuptools
 ```
 
-* Create a virtual environment and install dependencies then switch to it
+* Create a virtual environment and activate it
 ```
-$ pipenv install
-$ pipenv shell
+$ python3 -m venv env
+$ . env/bin/activate
 ```
 
-* Install Deer in editable mode
+* Install Deer and its dependencies in editable mode
 ```
-$ pip install -e .
+$ pip install -e .[tests]
 ```
 
 * Install pre-commit hooks
