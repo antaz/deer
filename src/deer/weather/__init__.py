@@ -5,12 +5,13 @@ import re
 
 print("Loading the weather module...")
 
+
 class Weather:
-    """ Weather class.
+    """Weather class.
 
     Get the current weather for a place.
     Queries wttr.in for JSON response
-    
+
     Attributes:
 
     curr_temp: str     # Current Temperature in Celcius
@@ -24,8 +25,7 @@ class Weather:
     """
 
     def __init__(self, query: str) -> None:
-
-        m = re.search(r'(weather) (.*)\b', query)
+        m = re.search(r"(weather) (.*)\b", query)
 
         try:
             self.city = m.group(2).strip().replace(" ", "%20")
@@ -36,10 +36,8 @@ class Weather:
         else:
             self.query_wttrin()
 
-
     def query_wttrin(self):
-
-        self.URL = 'https://wttr.in/{}?format=j2'.format(self.city) 
+        self.URL = "https://wttr.in/{}?format=j2".format(self.city)
         # format=j1 returns hourly info, which is overkill
 
         try:
@@ -48,32 +46,29 @@ class Weather:
         except Exception as e:
             self.info = f"gtfo: error {e}"
             return
-            
+
         self.parse_json(data)
 
-
     def parse_json(self, data: dict):
+        self.curr_temp = data["current_condition"][0]["temp_C"]
+        self.curr_desc = data["current_condition"][0]["weatherDesc"][0][
+            "value"
+        ]
+        self.precip_mm = data["current_condition"][0]["precipMM"]
+        self.l_c = data["weather"][0]["mintempC"]
+        self.h_c = data["weather"][0]["maxtempC"]
+        self.country = data["nearest_area"][0]["country"][0]["value"]
 
-        self.curr_temp = data['current_condition'][0]['temp_C']
-        self.curr_desc = data['current_condition'][0]['weatherDesc'][0]['value']
-        self.precip_mm = data['current_condition'][0]['precipMM']
-        self.l_c       = data['weather'][0]['mintempC']
-        self.h_c       = data['weather'][0]['maxtempC']
-        self.country   = data['nearest_area'][0]['country'][0]['value']
-
-        self.info =  (
+        self.info = (
             f"{self.curr_desc} over in "
             f"{self.city.capitalize().replace('%20', ' ')}, {self.country}. "
             f"{self.curr_temp}°C [{self.l_c}, {self.h_c}]°C."
         )
 
-
     def __repr__(self):
-
         return self.info
 
 
-if __name__ == '__main__':
-
+if __name__ == "__main__":
     city = Weather("Toulouse")
     print(city.__str__())
