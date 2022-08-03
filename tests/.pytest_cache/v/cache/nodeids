@@ -1,6 +1,0 @@
-[
-  "test_weather.py::test_always_true",
-  "test_weather.py::test_json_content",
-  "test_weather.py::test_json_parser",
-  "test_weather.py::test_wttr_response"
-]
