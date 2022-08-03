@@ -2,9 +2,9 @@ import sys
 import re
 import importlib
 import weather
-import ud
 import translate
 from Socket import Socket
+import urbandict
 
 sys.path.append("..")
 
@@ -55,7 +55,7 @@ with Socket() as socket:
         elif ":.reload" in data:
             importlib.reload(weather)
             print("Weather module reloaded.")
-            importlib.reload(ud)
+            importlib.reload(urbandict)
             print("UD module reloaded.")
             importlib.reload(translate)
             print("Translation module reloaded.")
@@ -84,7 +84,7 @@ with Socket() as socket:
                 print("\n", f"{e=}")
                 continue
 
-            definition = ud.UrbanDictionary(data)
+            definition = urbandict.UrbanDictionary(data)
 
             msg = f"PRIVMSG {channel} :{definition}"
             socket.send(msg)
