@@ -35,7 +35,7 @@ $ . env/bin/activate
 
 * Install Deer and its dependencies in editable mode
 ```
-$ pip install -e .[tests]
+$ pip install -e .[extra] # this installs dev dependencies too
 ```
 
 * Install pre-commit hooks
