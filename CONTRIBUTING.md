@@ -8,12 +8,12 @@ $ git config --global user.name 'your name'
 $ git config --global user.email 'your email'
 ```
 
-* Fork Deer to your Github account by clicking the [Fork](https://github.com/nxf7/deer/fork)
+* Fork Deer to your Github account by clicking the [Fork](https://github.com/blocr/deer/fork)
 button
 
 * Clone the main Deer repository locally (through https or preferably ssh)
 ```
-$ git clone https://github.com/nxf7/deer
+$ git clone https://github.com/blocr/deer
 $ cd deer
 ```
 

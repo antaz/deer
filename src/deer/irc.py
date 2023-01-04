@@ -100,8 +100,17 @@ class IRC:
     def parse_worker(self):
         while True:
             msg = self.socket.getq()
+
+            # spec: https://modern.ircdocs.horse/#message-format
             parsed_msg = re.match(
-                r"(?P<prefix>\S+)?(?P<cmd>\S+)(?P<params>.*)\r\n", msg
+                r"""
+                (?P<tag>@\S+ )?
+                (?P<source>:\S+ )?
+                (?P<cmd>\S+ )
+                (?P<params>.*)
+                \r\n""",
+                msg,
+                re.VERBOSE,
             )
 
             if parsed_msg:
