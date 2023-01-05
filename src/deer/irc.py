@@ -104,9 +104,9 @@ class IRC:
             # spec: https://modern.ircdocs.horse/#message-format
             parsed_msg = re.match(
                 r"""
-                (?P<tag>@\S+ )?
-                (?P<source>:\S+ )?
-                (?P<cmd>\S+ )
+                (?P<tag>@\S+\s)?
+                (?P<source>:\S+\s)?
+                (?P<cmd>\S+\s)
                 (?P<params>.*)
                 \r\n""",
                 msg,
