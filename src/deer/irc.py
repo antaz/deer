@@ -76,7 +76,8 @@ class IRC:
     def connect(self):
         self.socket.connect()
         self.ident(self.conf["nick"], self.conf["user"], self.conf["realname"])
-        self.join(self.conf["channels"])
+        if self.conf["channels"]:
+            self.join(self.conf["channels"])
         Thread(target=self.parse_worker, daemon=False).start()
 
     def ident(self, nick, user, realname):
@@ -118,7 +119,7 @@ class IRC:
                 if parsed_msg.group("cmd") == "PING":
                     self.send(msg.replace("PING", "PONG"))
                 elif parsed_msg.group("cmd") == "PRIVMSG":
-                    chan, msg = parsed_msg.group("params").split(":", 1)
+                    (chan, msg) = parsed_msg.group("params").split(":", 1)
 
     def send(self, msg):
         self.socket.putq(msg)
